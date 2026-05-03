@@ -4,8 +4,13 @@ import {
   Cpu, Zap, Mail, Phone, ChevronRight, Shield, 
   Database, Calendar, Layout, Brain, Workflow 
 } from 'lucide-react';
+import { useState } from 'react';
+import SignUpPage from '../components/Signup.jsx';
+import MemberSignup from '../components/MemberSignup.jsx';
 
 export default function LandingPage() {
+  const [openLeaderModal, setopenLeaderModal] = useState(false);
+  const [openMemberModal, setopenMemberModal] = useState(false);
   const fadeInUp = {
     hidden: { opacity: 0, y: 40 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
@@ -33,25 +38,26 @@ export default function LandingPage() {
           <img 
             src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=2000" 
             alt="Cyber Tech Background" 
-            className="w-full h-full object-cover opacity-20 grayscale"
+            className="w-full h-full object-cover opacity-6 grayscale"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#020617] via-transparent to-[#020617]" />
         </div>
 
-        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="relative z-10 max-w-5xl">
-          <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-none uppercase">
+        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="relative translate-y-5 flex flex-col justify-center items-center z-10 max-w-5xl">
+          <h1 className="text-5xl md:text-8xl font-black mb-5 tracking-tighter leading-none uppercase">
             Welcome to <span className="text-cyan-500 italic">A.X.O.N</span>
           </h1>
-          <p className="text-slate-400 text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed font-semibold">
-            Engineered by <strong>Phantom Troupe</strong>. <br />
-            An autonomous execution network designed for total project transparency and AI-driven decomposition.
+          <p className="text-slate-400 text-lg flex flex-col gap-10 md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed font-semibold">
+            {/* Engineered by <strong>Phantom Troupe</strong>. <br /> */}
+            <p className="text-bold font-mono text-2xl">Autonomous Execution & Orchestration Network</p>
+            <p className="">Transforming ideas into structured execution through intelligent planning, real-time orchestration, and seamless clarity.</p>
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <button className="group flex items-center gap-3 px-12 py-5 bg-cyan-600 hover:bg-cyan-800 text-white rounded-full font-black uppercase tracking-widest transition-all duration-300 cursor-pointer">
+            <button onClick={() => setopenLeaderModal(true)} className="group flex items-center gap-3 px-12 py-5 bg-cyan-600 hover:bg-cyan-800 text-white rounded-full font-black uppercase tracking-widest transition-all duration-300 cursor-pointer">
               Login Team Leader <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="px-12 py-5 border-2 border-slate-700 hover:border-white hover:bg-white/10 rounded-full font-black uppercase tracking-widest transition-all duration-300 cursor-pointer">
+            <button onClick={() => setopenMemberModal(true)} className="px-12 py-5 border-2 border-slate-700 hover:border-white hover:bg-white/10 rounded-full font-black uppercase tracking-widest transition-all duration-300 cursor-pointer">
               Login Team Member
             </button>
           </div>
@@ -134,6 +140,54 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+
+      {openLeaderModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative bg-[#020617] border border-white/10 rounded-3xl p-10 w-[90%] max-w-md"
+          >
+            <h2 className="text-2xl w-full font-black mb-6 text-center uppercase">
+              Team Leader Login
+            </h2>
+
+            <SignUpPage/>
+
+            <button
+              onClick={() => setopenLeaderModal(false)}
+              className="absolute top-4 right-6 text-slate-400 hover:text-white text-xl"
+            >
+              ✕
+            </button>
+          </motion.div>
+        </div>
+      )}
+
+      {openMemberModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative bg-[#020617] border border-white/10 rounded-3xl p-10 w-[90%] max-w-md"
+          >
+            <h2 className="text-2xl font-black mb-6 text-center uppercase">
+              Team Member Login
+            </h2>
+
+            <MemberSignup/>
+
+            <button
+              onClick={() => setopenMemberModal(false)}
+              className="absolute top-4 right-6 text-slate-400 hover:text-white text-xl"
+            >
+              ✕
+            </button>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
@@ -146,7 +200,7 @@ const WorkflowCard = ({ image, icon, title, desc }) => (
   >
     <div className="h-48 relative overflow-hidden">
       <img src={image} alt={title} className="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-500" />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-slate-900 to-transparent" />
       <div className="absolute top-4 right-4 p-3 bg-cyan-600 rounded-xl shadow-2xl text-white">
         {icon}
       </div>

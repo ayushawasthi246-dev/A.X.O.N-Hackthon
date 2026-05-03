@@ -3,26 +3,29 @@ import axios from 'axios'
 import { userInfo } from './authstore.jsx'
 
 const serverURL = import.meta.env.VITE_BACKEND_URL
-const token = userInfo.getState().accessToken
 
 export const ProjectStore = create((set, get) => ({
+
     ProjectCreate: async (Data) => {
+        const token = userInfo.getState().accessToken;
         console.log("DATA : ", Data)
         try {
-            const result = await axios.post(serverURL + '/Project/Create-Project', { Data }, {
+            const result = await axios.post(serverURL + '/Project/Create-Project', { Data } , {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
 
+            console.log("REEEEEEEEE : ", result)
+
             return { success: true, message: result }
         } catch (error) {
-            console.log("Error : ", error)
+            console.log("Errvfsvfdsbfdbdfor : ", error)
             return { success: false, message: error }
         }
     },
 
-    ProjectUpdate: async (Data , id) => {
+    ProjectUpdate: async (Data, id) => {
         try {
             const result = await axios.post(serverURL + `/Project/Update-Project/${id}`, { Data }, {
                 headers: {
@@ -37,9 +40,27 @@ export const ProjectStore = create((set, get) => ({
         }
     },
 
-    ProjectList: async (Data) => {
+    projects: [],
+
+    ProjectList: async () => {
+        // GET TOKEN HERE
+        const token = userInfo.getState().accessToken; 
         try {
-            const result = await axios.get(serverURL + '/Project/Project-List',{
+            const result = await axios.get(serverURL + '/Project/Project-List', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            // Update state so the UI re-renders
+            set({ projects: result.data.ProjectList }); 
+            return { success: true, message: result };
+        } catch (error) {
+            return { success: false, message: error };
+        }
+    },
+
+    MemberProjectList: async () => {
+        console.log("HELLO ACCESS : ", token)
+        try {
+            const result = await axios.get(serverURL + '/Project/Members-Project-List', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -52,20 +73,5 @@ export const ProjectStore = create((set, get) => ({
         }
     },
 
-    UserList: async () => {
-    try {
-        const token = userInfo.getState().accessToken
-
-        const res = await axios.get(serverURL + "/auth/MembersList", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-        return { success: true, data: res.data }
-    } catch (err) {
-        return { success: false, message: err }
-    }
-}
 })
 )

@@ -117,7 +117,6 @@ export const MemeberGoogleSingup = async (req, res) => {
   }
 }
 
-
 export const refreshAccessToken = async (req, res) => {
 
   const { refreshToken } = req.cookies
@@ -143,10 +142,13 @@ export const refreshAccessToken = async (req, res) => {
 }
 
 export const allMembersList = async (req, res) => {
+  console.log("121212")
   try {
-    const MembersList = await MemberUserModel.find({ })
+    const MembersList = await MemberUserModel.find({})
+    console.log("1212111111111 : ", MembersList)
     return res.status(200).json({ success: "true", MembersList })
   } catch (err) {
+    console.log("ERRROR HAI MUHJMAI :", err)
     res.status(500).json({
       message: "Internal Server Error"
     });
